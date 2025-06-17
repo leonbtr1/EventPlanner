@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>EventPlanner</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<h2>Dodaj događaj</h2>
+<form method="POST" action="/dodaj_dogadaj">
+    <input name="naziv" placeholder="Naziv" required>
+    <input name="opis" placeholder="Opis" required>
+    <input name="lokacija" placeholder="Lokacija" required>
+    <input name="datum" type="date" required>
+    <input name="maksimalno_mjesta" type="number" required>
+    <button type="submit">Dodaj</button>
+</form>
+
+<h2>Prijava sudionika</h2>
+<form method="POST" action="/prijavi_sudionika">
+    <input name="ime" placeholder="Ime" required>
+    <input name="prezime" placeholder="Prezime" required>
+    <input name="email" placeholder="Email" required>
+    <input name="dogadaj_id" type="number" placeholder="ID događaja" required>
+    <button type="submit">Prijavi se</button>
+</form>
+
+</body>
+</html>
