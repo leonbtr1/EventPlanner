@@ -30,4 +30,4 @@ docker-compose up --build
 
 4. **Otvorite aplikaciju**
 
-Aplikacija će biti dostupna na http://localhost:5000
+Aplikacija će biti dostupna na http://localhost:5001
