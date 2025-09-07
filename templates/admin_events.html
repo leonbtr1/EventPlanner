@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% block title %}Admin · EventPlanner{% endblock %}
+{% block content %}
+  <h2>Create Event</h2>
+  <form method="post" action="{{ url_for('create_event') }}" class="grid-form">
+    <label>
+      <span>Name</span>
+      <input required type="text" name="name" />
+    </label>
+    <label>
+      <span>Description</span>
+      <textarea name="description" rows="3"></textarea>
+    </label>
+    <label>
+      <span>Date</span>
+      <input required type="date" name="date" />
+    </label>
+    <label>
+      <span>Capacity</span>
+      <input required type="number" name="capacity" min="1" />
+    </label>
+    <button type="submit">Create</button>
+  </form>
+
+  <h2 style="margin-top:2rem;">All Events</h2>
+  <div class="cards">
+    {% for e in events %}
+      <article class="card">
+        <header>
+          <h3>{{ e.name }}</h3>
+          <p class="muted">{{ e.date.strftime('%Y-%m-%d') }}</p>
+        </header>
+        <p>{{ e.description }}</p>
+        <p>
+          Capacity: <strong>{{ e.capacity }}</strong> ·
+          Registered: <strong>{{ e.registrations|length }}</strong>
+        </p>
+        <form method="post" action="{{ url_for('delete_event', event_id=e.id) }}">
+          <button type="submit" class="danger">Delete</button>
+        </form>
+      </article>
+    {% else %}
+      <p>No events yet.</p>
+    {% endfor %}
+  </div>
+{% endblock %}
