@@ -1,12 +1,14 @@
 services:
   web:
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile.dockerfile   
     container_name: eventplanner
     ports:
-      - "5001:5000"        # host:container (app sluša na 5000 u kontejneru)
+      - "5001:5000"      
     environment:
       SECRET_KEY: dev
       SQLITE_PATH: /app/data/database.sqlite
     volumes:
-      - ./data:/app/data   # trajna SQLite baza u ./data
+      - ./data:/app/data
     restart: unless-stopped
