@@ -8,6 +8,8 @@ Backend za aplikaciju je napravljen pomoću pythona koristeći biblioteke Flask 
 
 ## UseCase dijagram
 
+![Use Case dijagram](UseCase.png)
+
 
 ## Kako pokrenuti aplikaciju
 
