@@ -1,59 +1,44 @@
 {% extends 'base.html' %}
-{% block title %}Admin · EventPlanner{% endblock %}
+{% block title %}Događaji · EventPlanner{% endblock %}
 {% block content %}
+  <h2>Dostupni događaji</h2>
 
-  <h2>Create Event</h2>
-  <form method="post" action="{{ url_for('create_event') }}" class="grid-form">
-    <label>
-
-      <span>Ime</span>
-      <input required type="text" name="name" />
-    </label>
-
-    <label>
-      <span>Opis</span>
-      <textarea name="description" rows="3"></textarea>
-    </label>
-
-    <label>
-      <span>Datum</span>
-      <input required type="date" name="date" />
-    </label>
-
-    <label>
-      <span>Kapacitet</span>
-      <input required type="number" name="capacity" min="1" />
-    </label>
-
-    <button type="submit">Stvori</button>
-  </form>
-
-  <h2 style="margin-top:2rem;">Svi događaji</h2>
-  
   <div class="cards">
-    {% for e in events %}
-      <article class="card">
-        
-        <header>
-          <h3>{{ e.name }}</h3>
-          <p class="mute">{{ e.date.strftime('%Y-%m-%d') }}</p>
-        </header>
-        
-        <p>{{ e.description }}</p>
-        <p>
-          Kapacitet: <strong>{{ e.capacity }}</strong> ·
-          Registrirano: <strong>{{ e.registrations|length }}</strong>
-        </p>
-        
-        <form method="post" action="{{ url_for('delete_event', event_id=e.id) }}">
-          <button type="submit" class="danger">Obriši</button>
-        </form>
-      
-      </article>
+    {% if events %}
+      {% for e in events %}
+        <article class="card">
+          
+          <header>
+            <h3>{{ e.name }}</h3>
+            <p class="mute">{{ e.date.strftime('%Y-%m-%d') }}</p>
+          </header>
+
+          {% if e.description %}
+            <p>{{ e.description }}</p>
+          {% endif %}
+
+          <p>
+            Kapacitet: <strong>{{ e.capacity }}</strong> ·
+            Prijavljeno: <strong>{{ e.registrations|length }}</strong> ·
+            Slobodna mjesta: <strong>{{ e.capacity - (e.registrations|length) }}</strong>
+          </p>
+
+          <form method="post" action="{{ url_for('register') }}" class="form-inline">
+            
+            <input type="hidden" name="event_id" value="{{ e.id }}" />
+            <input required type="text"  name="name"  placeholder="Ime" />
+            <input required type="email" name="email" placeholder="E-mail" />
+            
+            <button type="submit" {% if e.registrations|length >= e.capacity %}disabled{% endif %}>
+              {% if e.registrations|length >= e.capacity %}Popunjeno{% else %}Prijavi se{% endif %}
+            </button>
+          </form>
+        </article>
+      {% endfor %}
+    
     {% else %}
-      
-    <p>Još nema događaja.</p>
-    {% endfor %}
-  
+      <p>Nema događaja. Provjerite kasnije.</p>
+    
+    {% endif %}
   </div>
 {% endblock %}
