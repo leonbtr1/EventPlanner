@@ -20,6 +20,8 @@ def create_app():
 
     @app.route('/register', methods=['POST'])
     @db_session
+    
+    
     def register():
         event_id = int(request.form.get('event_id', 0))
         name = (request.form.get('name') or '').strip()
@@ -27,24 +29,23 @@ def create_app():
 
         event = Event.get(id=event_id)
         if not event:
-            flash('Event not found.', 'error')
+            flash('Događaj nije pronađen.', 'error')
             return redirect(url_for('index'))
 
-        # Capacity check
         if len(event.registrations) >= event.capacity:
-            flash('Event is full.', 'error')
+            flash('Događaj je popunjen.', 'error')
             return redirect(url_for('index'))
 
-        # Optional: avoid duplicate registrations by email per event
         if Registration.get(event=event, attendee_email=email):
-            flash('You are already registered for this event.', 'info')
+            flash('Već ste prijavljeni na ovaj događaj.', 'info')
             return redirect(url_for('index'))
 
         Registration(attendee_name=name, attendee_email=email, event=event)
-        flash('Registration successful!', 'success')
+        flash('Prijava uspješna', 'success')
         return redirect(url_for('index'))
 
-    # --- Admin ---
+
+
     @app.route('/admin')
     def admin_redirect():
         return redirect(url_for('admin_events'))
@@ -65,29 +66,31 @@ def create_app():
         try:
             date = datetime.strptime(date_str, '%Y-%m-%d').date()
         except ValueError:
-            flash('Invalid date format.', 'error')
+            flash('Neispravan datum.', 'error')
             return redirect(url_for('admin_events'))
 
         Event(name=name, description=description, date=date, capacity=capacity)
-        flash('Event created.', 'success')
+        flash('Događaj kreiran.', 'success')
         return redirect(url_for('admin_events'))
 
-    # Optional MVP: Delete event
+
+
     @app.route('/admin/events/<int:event_id>/delete', methods=['POST'])
     @db_session
     def delete_event(event_id):
         event = Event.get(id=event_id)
         if event:
             event.delete()
-            flash('Event deleted.', 'success')
+            flash('Događaj obrisan,', 'success')
         else:
-            flash('Event not found.', 'error')
+            flash('Događaj nije nađen.', 'error')
         return redirect(url_for('admin_events'))
 
     return app
 
 
 app = create_app()
+
 
 if __name__ == '__main__':
     # Dev server for local testing
